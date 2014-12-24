@@ -1,0 +1,16 @@
+#excute wsdl consumer and dump the output to a file:
+#the query input will be in case2 (is hardcoded!!)
+python wsdl_consumer.py > res
+#the output is a <xml> result_set from the website
+
+#now, we got a list just get the documents
+./bash_parser.sh res
+#parse and get urls..
+./url_parser.sh res
+
+
+#To retrieve one document by CELEX:
+#CELEX id:32014R0165
+#LANG: EN
+./get_one_document.sh 32014R0165 EN
+
