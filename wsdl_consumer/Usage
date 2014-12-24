@@ -14,3 +14,6 @@ python wsdl_consumer.py > res
 #LANG: EN
 ./get_one_document.sh 32014R0165 EN
 
+#Parse a Document
+./article2_parser.py  -c 32014R0165 -s article2 --bullet="letters"
+
