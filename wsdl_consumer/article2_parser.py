@@ -24,9 +24,9 @@ lang_list_article3 = {
 }
 
 #debugg
-celex_id= "32014R0165"
-start_string= "article2"
-bullet  = "letters"
+#celex_id= "32014R0165"
+#start_string= "article2"
+#bullet  = "letters"
 
 
 download_folder = './downloaded/'
@@ -49,7 +49,7 @@ def read_in_lines(file_object):
             break
         yield data
 
-def get_articles_es(my_file,bullet_separator,lang_header,lang_footer):
+def get_articles_es(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -75,7 +75,7 @@ def get_articles_es(my_file,bullet_separator,lang_header,lang_footer):
       del my_file
   return articles
 
-def get_articles_en(my_file,bullet_separator,lang_header,lang_footer):
+def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -110,7 +110,7 @@ def get_articles_en(my_file,bullet_separator,lang_header,lang_footer):
       del my_file
   return articles
 
-def get_articles_fr(my_file,bullet_separator,lang_header,lang_footer):
+def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -145,7 +145,7 @@ def get_articles_fr(my_file,bullet_separator,lang_header,lang_footer):
       del my_file
   return articles
 
-def get_articles_de(my_file,bullet_separator,lang_header,lang_footer):
+def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -224,6 +224,11 @@ def main(argv):
   #Process bullet, letters, means a) , b) ...
   if bullet == "letters":
     bullet_separator = ')'
+    bullet_starter = 'a)'
+  elif bullet == "numbers":
+    bullet_separator = ')'
+    bullet_starter = '1)'
+
 
   #go to "article 2" "definition", or any other input provided.(have fun with the translations and html)
   #ES: Art&iacute;culo 2 Definiciones
@@ -239,10 +244,10 @@ def main(argv):
   my_file_en = read_in_lines(f_en)
   my_file_fr = read_in_lines(f_fr)
   my_file_de = read_in_lines(f_de)
-  articles_es = get_articles_es(my_file_es,bullet_separator,lang_list_article2['ES'],lang_list_article3['ES'])
-  articles_en = get_articles_en(my_file_en,bullet_separator,lang_list_article2['EN'],lang_list_article3['EN'])
-  articles_fr = get_articles_fr(my_file_fr,bullet_separator,lang_list_article2['FR'],lang_list_article3['FR'])
-  articles_de = get_articles_de(my_file_de,bullet_separator,lang_list_article2['DE'],lang_list_article3['DE'])
+  articles_es = get_articles_es(my_file_es,bullet_separator,bullet_starter,lang_list_article2['ES'],lang_list_article3['ES'])
+  articles_en = get_articles_en(my_file_en,bullet_separator,bullet_starter,lang_list_article2['EN'],lang_list_article3['EN'])
+  articles_fr = get_articles_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article2['FR'],lang_list_article3['FR'])
+  articles_de = get_articles_de(my_file_de,bullet_separator,bullet_starter,lang_list_article2['DE'],lang_list_article3['DE'])
   print " ES "
   print articles_es
   print " EN "
