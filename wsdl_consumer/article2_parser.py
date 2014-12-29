@@ -5,25 +5,11 @@
 #input values 2.- "Start Article"
 #input values 3.- "letters or numbers"
 from subprocess import Popen
+from subprocess import call
 import xml.etree.ElementTree as ET
 import sys,getopt
 import os
 
-print sys.argv
-lang_list_article2 = {
-"ES":">Art&iacute;culo 2<",
-"EN":">Article 2<",
-"FR":">Article 2<",
-"DE":">Artikel 2<" 
-}
-lang_list_article3 = {
-"ES":">Art&iacute;culo 3<",
-"EN":">Article 3<",
-"FR":">Article 3<",
-"DE":">Artikel 3<"
-}
-
-#debugg
 #celex_id= "32014R0165"
 #start_string= "article2"
 #bullet  = "letters"
@@ -66,6 +52,7 @@ def get_articles_es(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
 		if my_line != '':
 		  if bullet_separator in my_line:
                     articles[my_line.split(bullet_separator)[0].replace(" ", "")]=my_line.split(bullet_separator)[1]
+                    #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
               else:
                 raise StopIteration
               line = next(my_file)
@@ -101,7 +88,7 @@ def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
 		      clean_definition = striphtml(line)
                       articles[current_bullet]=clean_definition
               else:
-                print "We reach the end of the article!!"
+                #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
   except StopIteration:
@@ -127,7 +114,7 @@ def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 if my_line != '':
                   if bullet_separator in my_line:
                     partial_current_bullet = my_line.split(bullet_separator)[0]
-                    current_bullet = partial_current_bullet.replace(" ", "")
+                    current_bullet = partial_current_bullet.replace(" ","")
                     #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
                     line = next(my_file)
                     #after the bullet, there is a empty line 
@@ -136,7 +123,7 @@ def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                       clean_definition = striphtml(line)
                       articles[current_bullet]=clean_definition
               else:
-                print "We reach the end of the article!!"
+                #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
   except StopIteration:
@@ -162,7 +149,7 @@ def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 if my_line != '':
                   if bullet_separator in my_line:
                     partial_current_bullet = my_line.split(bullet_separator)[0]
-                    current_bullet = partial_current_bullet.replace(" ", "")
+                    current_bullet = partial_current_bullet.replace(" ","")
                     #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
                     line = next(my_file)
                     #after the bullet, there is a empty line 
@@ -171,7 +158,7 @@ def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                       clean_definition = striphtml(line)
                       articles[current_bullet]=clean_definition
               else:
-                print "We reach the end of the article!!"
+                #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
   except StopIteration:
@@ -182,7 +169,7 @@ def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
 
 
 def main(argv):
-  print "we are in"
+  #print "we are in"
   celex_id = ''
   start_string = ''
   bullet = ''
@@ -206,15 +193,40 @@ def main(argv):
        print helpstr
        sys.exit()
 
+  #go to "article 2" "definition", or any other input provided.(have fun with the translations and html)
+  #ES: Art&iacute;culo 2 Definiciones
+  #EN: Article 2 Definitions
+  #FR: Article 2 Définitions
+  #DE: Artikel 2 Begriffsbestimmungen
+  if start_string  == "article1":
+    lang_list_article = {
+    "ES":">Art&iacute;culo 1<",
+    "EN":">Article 1<",
+    "FR":">Article 1<",
+    "DE":">Artikel 1<"
+    }
+  elif start_string  == "article2":
+    lang_list_article = {
+    "ES":">Art&iacute;culo 2<",
+    "EN":">Article 2<",
+    "FR":">Article 2<",
+    "DE":">Artikel 2<"
+    }
+  elif start_string  == "article3":
+    lang_list_article = {
+    "ES":">Art&iacute;culo 3<",
+    "EN":">Article 3<",
+    "FR":">Article 3<",
+    "DE":">Artikel 3<"
+    }
 
   #Download the document for each language,
-  for i in lang_list_article2:
-    #TODO:DOwnload the files, remove comments from here!!!
-    #p = Popen([executable_folder+"get_one_document_rc2.sh",download_folder , celex_id ,i])
-    #p.communicate() #now wait
-    #call([executable_folder+"get_one_document_rc2.sh",download_folder , celex_id ,i ])
-    pass
-    #TODO:wait till finish the download...  
+  #TODO:DOwnload the files, remove comments from here!!!
+  #for i in lang_list_article:
+  #  import urllib
+  #  url="http://eur-lex.europa.eu/legal-content/"+i+"/TXT/HTML/?uri=CELEX:"+celex_id+"&from=ES"
+  #  urllib.urlretrieve(url, filename=download_folder+celex_id+"."+i+".txt")
+
   #now we are going to open all of them
   f_es = open(download_folder+''+celex_id+'.ES'+'.txt','r')
   f_en = open(download_folder+''+celex_id+'.EN'+'.txt','r')
@@ -235,27 +247,68 @@ def main(argv):
   #EN: Article 2 Definitions
   #FR: Article 2 Définitions
   #DE: Artikel 2 Begriffsbestimmungen
-  if start_string  == "article2":
-    print "we are in article 2 extraction method"
-    #lines_es = f_es.readlines()
-    #starting_line(lines_es,lang_list_article2['ES'])
-  
+  ### Should be homogeinized if there is no corner cases with articles headers
+  if start_string  == "article1":
+    lang_list_article = {
+    "ES":">Art&iacute;culo 1<",
+    "EN":">Article 1<",
+    "FR":">Article 1<",
+    "DE":">Artikel 1<"
+    }
+    lang_list_footer = {
+    "ES":">Art&iacute;culo 2<",
+    "EN":">Article 2<",
+    "FR":">Article 2<",
+    "DE":">Artikel 2<"
+    }
+
+  elif start_string  == "article2":
+    lang_list_article = {
+    "ES":">Art&iacute;culo 2<",
+    "EN":">Article 2<",
+    "FR":">Article 2<",
+    "DE":">Artikel 2<"
+    }
+    lang_list_footer = {
+    "ES":">Art&iacute;culo 3<",
+    "EN":">Article 3<",
+    "FR":">Article 3<",
+    "DE":">Artikel 3<"
+    }
+
+  elif start_string  == "article3":
+    lang_list_article = {
+    "ES":">Art&iacute;culo 3<",
+    "EN":">Article 3<",
+    "FR":">Article 3<",
+    "DE":">Artikel 3<"
+    }
+    lang_list_footer = {
+    "ES":">Art&iacute;culo 4<",
+    "EN":">Article 4<",
+    "FR":">Article 4<",
+    "DE":">Artikel 4<"
+    }
+
+ 
   my_file_es = read_in_lines(f_es)
   my_file_en = read_in_lines(f_en)
   my_file_fr = read_in_lines(f_fr)
   my_file_de = read_in_lines(f_de)
-  articles_es = get_articles_es(my_file_es,bullet_separator,bullet_starter,lang_list_article2['ES'],lang_list_article3['ES'])
-  articles_en = get_articles_en(my_file_en,bullet_separator,bullet_starter,lang_list_article2['EN'],lang_list_article3['EN'])
-  articles_fr = get_articles_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article2['FR'],lang_list_article3['FR'])
-  articles_de = get_articles_de(my_file_de,bullet_separator,bullet_starter,lang_list_article2['DE'],lang_list_article3['DE'])
-  print " ES "
+  articles_es = get_articles_es(my_file_es,bullet_separator,bullet_starter,lang_list_article['ES'],lang_list_footer['ES'])
+  articles_en = get_articles_en(my_file_en,bullet_separator,bullet_starter,lang_list_article['EN'],lang_list_footer['EN'])
+  articles_fr = get_articles_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article['FR'],lang_list_footer['FR'])
+  articles_de = get_articles_de(my_file_de,bullet_separator,bullet_starter,lang_list_article['DE'],lang_list_footer['DE'])
+  #I am Sure that there is 100 ways betters to do it... 
+  print " {'ES': "
   print articles_es
-  print " EN "
+  print ",'EN':"
   print articles_en
-  print " FR "
+  print ",'FR': "
   print articles_fr
-  print " DE "
+  print ",'DE': "
   print articles_de
+  print " } "
 
 
     
