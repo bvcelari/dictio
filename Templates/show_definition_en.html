@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hr>
+Term: {{ concept.name_en }}
+<hr>
+Description:
+<br>
+{{ concept.description_en }}
+<p><br>
+
+Source Document: {{ concept.sourcedocument.name_en }} 
+<br>Category:  {{ concept.category.name_en}}
+<br>Revised by ours Experts: {{ concept.cheked }}
+
+</table>
+
+{% endblock %}
