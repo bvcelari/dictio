@@ -58,7 +58,7 @@ INSTALLED_APPS = (
 #HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 TEMPLATE_DIRS = (
-    '/home/adminuser/Fran/dictio/Templates/',
+    '/home/adminuser/Fran2/dictio/Templates/',
 )
 
 MIDDLEWARE_CLASSES = (
