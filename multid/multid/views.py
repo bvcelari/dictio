@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.http import Http404
@@ -9,10 +11,26 @@ from multid.forms import ConceptSearchFormEN
 from multid.forms import ConceptSearchFormES
 from multid.forms import ConceptSearchFormFR
 from multid.forms import ConceptSearchFormGE
+from multid.forms import ImportConcept
 
 
 query_limit = 5
 #TODO: refactor search adding the language in the parameter and use it to call the right template...
+
+
+
+@login_required(login_url='/login/')
+def import_concepts(request):
+    form = ImportConcept()
+    if request.POST:
+      form = ImportConcept(request.POST)
+      if form.is_valid():
+        url = request.POST['url']
+        kind = request.POST['kind']
+        bullet = request.POST['bullet']
+        document_id = url.split('CELEX:')
+    return render(request, 'import.html', {'form':form})
+
 def searchen(request):
     search_param = ""
     parent = ""

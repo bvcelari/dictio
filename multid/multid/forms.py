@@ -1,6 +1,16 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from multid.models import ConceptEn
+class ImportConcept(forms.Form):
+    #url=#celex_id
+    url=forms.URLField(required = True)	
+    #kind#article2,  article1, article3
+    kind = forms.ChoiceField(widget = forms.Select(), 
+                     choices = ([('articulo1','articulo1'), ('articulo2','articulo2'),('articulo3','articulo3'), ]), initial='2', required = True,)
+    #bullet #letters, numbers"letters" 
+    bullet = forms.ChoiceField(widget = forms.Select(),
+                     choices = ([('letters','letters'), ('numbers','numbers')]), initial='1', required = True,)
+    
 
 class ConceptSearchFormEN(forms.Form):
     concept_search = forms.CharField(label='Search', max_length=100)
