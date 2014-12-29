@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.contrib.auth import views
 
 urlpatterns = patterns('',
     # Examples:
@@ -13,5 +14,9 @@ urlpatterns = patterns('',
     url(r'^es/search/$', 'multid.views.searches', name='concepts'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^(?P<lang_id>\w+)/(?P<concept_id>\d+)/$', 'multid.views.definition', name='definition'),
+    url(r'^import_concepts/$', 'multid.views.import_concepts', name='concepts'),
+
+url(r'^login/$', views.login, name='login'),
+url(r'^logout/$', views.logout, name='logout'),
 
 )
