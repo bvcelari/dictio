@@ -13,6 +13,9 @@ from multid.forms import ConceptSearchFormFR
 from multid.forms import ConceptSearchFormGE
 from multid.forms import ImportConcept
 
+import subprocess
+import ast
+
 
 query_limit = 5
 #TODO: refactor search adding the language in the parameter and use it to call the right template...
@@ -25,11 +28,25 @@ def import_concepts(request):
     if request.POST:
       form = ImportConcept(request.POST)
       if form.is_valid():
+        print "we have a valid "
         url = request.POST['url']
         kind = request.POST['kind']
         bullet = request.POST['bullet']
-        document_id = url.split('CELEX:')
-    return render(request, 'import.html', {'form':form})
+        document_id = url.split('CELEX:')[1]
+        dict_tree = {}
+        p = subprocess.Popen(["/home/adminuser/Fran2/dictio/wsdl_consumer/article2_parser.py -c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out, err = p.communicate()
+        #print out
+        dict_tree = eval(out)
+        #print dict_tree['ES']
+        values_es = dict_tree['ES'].copy()
+        values_en = dict_tree['EN'].copy()
+        values_fr = dict_tree['FR'].copy()
+        values_de = dict_tree['DE'].copy()
+        #for key in output_values_es:
+        #  print key, 'corresponds to', output_values_es[key]
+        #  print key, 'corresponds to', output_values_en[key]
+    return render(request, 'import.html', {'form':form,'values_es':values_es})
 
 def searchen(request):
     search_param = ""

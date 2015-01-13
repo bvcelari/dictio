@@ -15,8 +15,8 @@ import os
 #bullet  = "letters"
 
 
-download_folder = './downloaded/'
-executable_folder = './'
+download_folder = '/home/adminuser/Fran2/dictio/wsdl_consumer/downloaded/'
+executable_folder = '/home/adminuser/Fran2/dictio/wsdl_consumer/'
 
 def remove_tags(text):
     ''.join(ET.fromstring(text).itertext())
@@ -300,16 +300,15 @@ def main(argv):
   articles_fr = get_articles_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article['FR'],lang_list_footer['FR'])
   articles_de = get_articles_de(my_file_de,bullet_separator,bullet_starter,lang_list_article['DE'],lang_list_footer['DE'])
   #I am Sure that there is 100 ways betters to do it... 
-  print " {'ES': "
+  print " {'ES':  "
   print articles_es
-  print ",'EN':"
+  print "  ,'EN': "
   print articles_en
-  print ",'FR': "
+  print "  ,'FR': "
   print articles_fr
-  print ",'DE': "
+  print "  ,'DE': "
   print articles_de
-  print " } "
-
+  print "  } "
 
     
   #go throw articles number (or letter!!) 
