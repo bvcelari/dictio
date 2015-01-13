@@ -25,6 +25,13 @@ query_limit = 5
 @login_required(login_url='/login/')
 def import_concepts(request):
     form = ImportConcept()
+    values_es = {} 
+    values_en = {} 
+    values_fr = {} 
+    values_de = {} 
+    dict_tree = {} 
+    output_values=[]
+    new_values = {}
     if request.POST:
       form = ImportConcept(request.POST)
       if form.is_valid():
@@ -46,7 +53,21 @@ def import_concepts(request):
         #for key in output_values_es:
         #  print key, 'corresponds to', output_values_es[key]
         #  print key, 'corresponds to', output_values_en[key]
-    return render(request, 'import.html', {'form':form,'values_es':values_es})
+	listed_bullets=sorted(values_es)
+	#from 1 to 4 ES EN FR DE
+        output_values=[[]]
+	new_values = {}
+        for key in listed_bullets:
+          new_values[key]={}
+          new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
+          #output_values[1].append(values_es[key])
+          #output_values[2].append(values_en[key])
+          #output_values[3].append(values_fr[key])
+          #output_values[4].append(values_de[key])
+        for i in new_values:
+	  print i 
+	  print new_values[i]
+    return render(request, 'import.html', {'form':form,'values_es':values_es,'values_en':values_en,'dict_tree':dict_tree,'output_values':output_values,'new_values':new_values})
 
 def searchen(request):
     search_param = ""

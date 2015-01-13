@@ -3,3 +3,32 @@
     {{ form.as_p  }}
     <input type="submit" value="Submit" />
 </form>
+<table>
+{% for bullet,list in new_values.items  %}
+<tr> <td><b>{{ bullet }} </b></td>
+   {% for concept in list  %}
+    <td>{{ concept |safe }}</td>
+   {% endfor %}
+</tr>
+{% endfor %}
+</table>
+
+<!-- 
+{% for lang, concept_list in dict_tree.items %}
+lang :{{ lang }} <br>
+  {% for bullet, concept  in concept_list %}
+
+ {{ bullet}} ) {{ concept }} <br>
+
+{% endfor %}
+{% endfor %}
+-->
+
+        <!-- {% if values_es %}
+	  {% for bullet, concept in values_es.items %} 
+             <b> {{ bullet }}</b> ): {{ concept |safe }} <br>
+          {% endfor %}
+        {% else %}
+            Please add the information below to add concepts
+        {% endif %}
+-->
