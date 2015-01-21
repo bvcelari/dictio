@@ -1,17 +1,30 @@
 <form action="/import_concepts/" method="post">
     {% csrf_token %}
     {{ form.as_p  }}
+
     <input type="submit" value="Submit" />
+
+{% if new_values %}
+<!-- -->
+  <table border=1px>
+  <tr><td> - </td><td>ES</td><TD>EN</TD><TD>FR</TD><TD>DE</TD><td>Yes  /Draft /No</td><TR>
+  {% for bullet,list in new_values.items  %}
+  <tr>   <td><b>{{ bullet }} </b></td>
+       {% for concept in list  %}
+         <td>{{ concept |safe }}</td>
+       {% endfor %}
+        <td> 
+          {{ forloop.counter }}<input type="radio" name="{{ bullet }}" value="Y" checked>Y
+          <input type="radio" name="{{ bullet }}" value="D" >D
+          <input type="radio" name="{{ bullet }}" value="N" >N
+
+<br>
+        </td>
+  </tr>
+  {% endfor %}
+  </table>
+{% endif %}
 </form>
-<table>
-{% for bullet,list in new_values.items  %}
-<tr> <td><b>{{ bullet }} </b></td>
-   {% for concept in list  %}
-    <td>{{ concept |safe }}</td>
-   {% endfor %}
-</tr>
-{% endfor %}
-</table>
 
 <!-- 
 {% for lang, concept_list in dict_tree.items %}

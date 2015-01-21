@@ -34,8 +34,8 @@ def import_concepts(request):
     new_values = {}
     if request.POST:
       form = ImportConcept(request.POST)
+      print request.POST
       if form.is_valid():
-        print "we have a valid "
         url = request.POST['url']
         kind = request.POST['kind']
         bullet = request.POST['bullet']
@@ -63,11 +63,44 @@ def import_concepts(request):
           #output_values[1].append(values_es[key])
           #output_values[2].append(values_en[key])
           #output_values[3].append(values_fr[key])
-          #output_values[4].append(values_de[key])
-        for i in new_values:
-	  print i 
-	  print new_values[i]
+          #output_values[4].append(values_de[key]) 
+        ##now we are going to put the keys in place... is horrible... but is fast TODO: sent to another place and get the file instead of re-download it.
+	myrequest = request.POST.copy()
+        del myrequest['url']
+        del myrequest['kind']
+        del myrequest['bullet']
+        del myrequest['category']
+        del myrequest['source']
+        del myrequest['csrfmiddlewaretoken']
+        #has no sense.. but works
+	if bool(myrequest):
+	  #########################
+	  ## We reprocessied the file.. change it!!
+	  #########################
+	  for key,value in myrequest.iteritems():
+            print value, key
+            if myrequest[key] == 'Y':
+	      #to add a new concept, first, creaate the father of all of them.
+              print new_values[key]
+              pass
+            elif myrequest[key] == 'D':
+              print "We are sending to drafts"
+	    else:
+              print "we are reqjecting" 
+
+	  #########################
+	  #########################
+	  #########################
+	else:
+	  print "first time"
+        len(myrequest)
+        
+
     return render(request, 'import.html', {'form':form,'values_es':values_es,'values_en':values_en,'dict_tree':dict_tree,'output_values':output_values,'new_values':new_values})
+
+@login_required(login_url='/login/')
+def submit_date(request):
+  pass
 
 def searchen(request):
     search_param = ""
