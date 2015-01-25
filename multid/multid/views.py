@@ -16,6 +16,8 @@ from multid.forms import ImportConcept
 import subprocess
 import ast
 
+import HTMLParser
+
 
 query_limit = 5
 #TODO: refactor search adding the language in the parameter and use it to call the right template...
@@ -30,7 +32,6 @@ def import_concepts(request):
     values_fr = {} 
     values_de = {} 
     dict_tree = {} 
-    output_values=[]
     new_values = {}
     if request.POST:
       form = ImportConcept(request.POST)
@@ -42,28 +43,31 @@ def import_concepts(request):
         document_id = url.split('CELEX:')[1]
         dict_tree = {}
         p = subprocess.Popen(["/home/adminuser/Fran2/dictio/wsdl_consumer/article2_parser.py -c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        print "EXECUTION"
+        print ["/home/adminuser/Fran2/dictio/wsdl_consumer/article2_parser.py -c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ]
         out, err = p.communicate()
-        #print out
+        print "OUT"
+        print out
+        print "ERR"
+        print err
         dict_tree = eval(out)
         #print dict_tree['ES']
         values_es = dict_tree['ES'].copy()
         values_en = dict_tree['EN'].copy()
         values_fr = dict_tree['FR'].copy()
         values_de = dict_tree['DE'].copy()
-        #for key in output_values_es:
-        #  print key, 'corresponds to', output_values_es[key]
-        #  print key, 'corresponds to', output_values_en[key]
 	listed_bullets=sorted(values_es)
 	#from 1 to 4 ES EN FR DE
-        output_values=[[]]
 	new_values = {}
         for key in listed_bullets:
-          new_values[key]={}
-          new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
-          #output_values[1].append(values_es[key])
-          #output_values[2].append(values_en[key])
-          #output_values[3].append(values_fr[key])
-          #output_values[4].append(values_de[key]) 
+          if bullet == 'letters':
+            new_values[key]={}
+            new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
+          elif bullet == 'numbers':
+            print "I am looing in key:"+key
+            new_values[key]={}
+            new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
+            
         ##now we are going to put the keys in place... is horrible... but is fast TODO: sent to another place and get the file instead of re-download it.
 	myrequest = request.POST.copy()
         del myrequest['url']
@@ -71,18 +75,61 @@ def import_concepts(request):
         del myrequest['bullet']
         del myrequest['category']
         del myrequest['source']
+        del myrequest['separator_en']
+        del myrequest['separator_es']
+        del myrequest['separator_fr']
+        del myrequest['separator_de']
         del myrequest['csrfmiddlewaretoken']
         #has no sense.. but works
 	if bool(myrequest):
 	  #########################
 	  ## We reprocessied the file.. change it!!
 	  #########################
+          separator_en = request.POST['separator_en']
+          separator_es = request.POST['separator_es']
+          separator_fr = request.POST['separator_fr']
+          separator_de = request.POST['separator_de']
+	  ##Get the category and document id 
+	  ##answer must be only one otherwise will crash, and I will be happy about it
+	  #current_category = Category.objects.filter(name__icontains=request.POST['category'])
+	  current_category = request.POST['category']
+	  #current_source = SourceDocument.objects.filter(name__icontains=request.POST['source'])
+	  current_source = request.POST['source']
+	  
 	  for key,value in myrequest.iteritems():
             print value, key
             if myrequest[key] == 'Y':
 	      #to add a new concept, first, creaate the father of all of them.
-              print new_values[key]
-              pass
+              h = HTMLParser.HTMLParser()
+              #ToDo:Please, split and make it redeable.
+              #from 1 to 4 ES EN FR DE
+	      new_concept_es = ConceptEs(name_es=h.unescape(new_values[key][0].split(separator_es)[0]),
+                    description_es=h.unescape(separator_es.join(new_values[key][0].split(separator_es)[1:])),
+                    category_id=current_category, 
+                    sourcedocument_id=current_source )
+	      new_concept_en = ConceptEn(name_en=h.unescape(new_values[key][1].split(separator_en)[0]), 
+                    description_en=h.unescape(separator_en.join(new_values[key][1].split(separator_en)[1:])),
+                    category_id=current_category, 
+                    sourcedocument_id=current_source )
+	      new_concept_fr = ConceptFr(name_fr=h.unescape(new_values[key][2].split(separator_fr)[0]), 
+                    description_fr=h.unescape(separator_fr.join(new_values[key][2].split(separator_fr)[1:])),
+                    category_id=current_category,
+                    sourcedocument_id=current_source )
+	      new_concept_de = ConceptGe(name_ge=h.unescape(new_values[key][3].split(separator_de)[0]), 
+                    description_ge=h.unescape(separator_de.join(new_values[key][3].split(separator_de)[1:])),
+                    category_id=current_category, 
+                    sourcedocument_id=current_source )
+	      new_concept_es.save()
+	      new_concept_en.save()
+	      new_concept_fr.save()
+	      new_concept_de.save()
+              new_concept = Concept(name= h.unescape(new_values[key][0].split(separator_es)[0]),
+			concept_es = new_concept_es,
+			concept_en = new_concept_en,
+			concept_fr = new_concept_fr,
+			concept_ge = new_concept_de
+		 )
+              new_concept.save()
             elif myrequest[key] == 'D':
               print "We are sending to drafts"
 	    else:
@@ -96,7 +143,7 @@ def import_concepts(request):
         len(myrequest)
         
 
-    return render(request, 'import.html', {'form':form,'values_es':values_es,'values_en':values_en,'dict_tree':dict_tree,'output_values':output_values,'new_values':new_values})
+    return render(request, 'import.html', {'form':form,'values_es':values_es,'values_en':values_en,'dict_tree':dict_tree,'new_values':new_values})
 
 @login_required(login_url='/login/')
 def submit_date(request):

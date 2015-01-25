@@ -221,11 +221,11 @@ def main(argv):
     }
 
   #Download the document for each language,
-  #TODO:DOwnload the files, remove comments from here!!!
-  #for i in lang_list_article:
-  #  import urllib
-  #  url="http://eur-lex.europa.eu/legal-content/"+i+"/TXT/HTML/?uri=CELEX:"+celex_id+"&from=ES"
-  #  urllib.urlretrieve(url, filename=download_folder+celex_id+"."+i+".txt")
+  
+  for i in lang_list_article:
+    import urllib
+    url="http://eur-lex.europa.eu/legal-content/"+i+"/TXT/HTML/?uri=CELEX:"+celex_id+"&from=ES"
+    urllib.urlretrieve(url, filename=download_folder+celex_id+"."+i+".txt")
 
   #now we are going to open all of them
   f_es = open(download_folder+''+celex_id+'.ES'+'.txt','r')

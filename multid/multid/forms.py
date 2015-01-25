@@ -14,6 +14,11 @@ class ImportConcept(forms.Form):
     #category =  forms.ModelMultipleChoiceField(queryset= Category.objects.all())
     category =  forms.ChoiceField( (o.id, str(o) ) for o in Category.objects.all() )
     source =  forms.ChoiceField( (o.id, str(o) ) for o in SourceDocument.objects.all() )
+
+    separator_es = forms.CharField(label='Separator ES',max_length=45,required=False ,initial=":")
+    separator_en = forms.CharField(label='Separator EN',max_length=45,required=False ,initial="means")
+    separator_fr = forms.CharField(label='Separator FR',max_length=45,required=False ,initial=",")
+    separator_de = forms.CharField(label='Separator DE',max_length=45,required=False ,initial="ist")
     
 
 class ConceptSearchFormEN(forms.Form):
