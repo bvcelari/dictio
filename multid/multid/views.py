@@ -61,13 +61,24 @@ def import_concepts(request):
 	new_values = {}
         for key in listed_bullets:
           if bullet == 'letters':
+	    print key
             new_values[key]={}
+	    print "the staff"
+	    print values_es[key]
+	    print values_en[key]
+	    print values_fr[key]
+	    print values_de[key]
             new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
           elif bullet == 'numbers':
             print "I am looing in key:"+key
-            new_values[key]={}
-            new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
-            
+	    #and sadly i key exist :( 
+	    if key.isdigit():
+              print "I am adding things"
+              new_values[key]={}
+              new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
+            else:
+	     #TODO:what happen with lost keys?
+	     pass
         ##now we are going to put the keys in place... is horrible... but is fast TODO: sent to another place and get the file instead of re-download it.
 	myrequest = request.POST.copy()
         del myrequest['url']

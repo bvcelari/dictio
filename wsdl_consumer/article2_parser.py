@@ -56,6 +56,20 @@ def get_articles_es(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
               else:
                 raise StopIteration
               line = next(my_file)
+	  ## logix for numbers
+	  if "1)" in line:
+            while True:
+              #print line
+              if lang_footer not in line:
+                my_line = striphtml(line)
+                if my_line != '':
+                  if bullet_separator in my_line:
+                    articles[my_line.split(bullet_separator)[0].replace(" ", "")]=my_line.split(bullet_separator)[1]
+                    #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
+              else:
+                raise StopIteration
+              line = next(my_file)
+
   except StopIteration:
       pass
   finally:
@@ -91,6 +105,28 @@ def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
+          ## logix for numbers
+          if "1)" in line:
+            while True:
+              #print line
+              if lang_footer not in line:
+                my_line = striphtml(line)
+                if my_line != '':
+                  if bullet_separator in my_line:
+                    partial_current_bullet = my_line.split(bullet_separator)[0]
+                    current_bullet = partial_current_bullet.split('(')[1]
+                    #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
+                    line = next(my_file)
+                    #after the bullet, there is a empty line 
+                    if not re.match(r'^\s*$', line):
+                      line = next(my_file)
+                      clean_definition = striphtml(line)
+                      articles[current_bullet]=clean_definition
+              else:
+                #print "We reach the end of the article!!"
+                raise StopIteration
+              line = next(my_file)
+
   except StopIteration:
       pass
   finally:
@@ -126,6 +162,28 @@ def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
+          ## logix for numbers
+          if "1)" in line:
+            while True:
+              #print line
+              if lang_footer not in line:
+                my_line = striphtml(line)
+                if my_line != '':
+                  if bullet_separator in my_line:
+                    partial_current_bullet = my_line.split(bullet_separator)[0]
+                    current_bullet = partial_current_bullet.replace(" ","")
+                    #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
+                    line = next(my_file)
+                    #after the bullet, there is a empty line 
+                    if not re.match(r'^\s*$', line):
+                      line = next(my_file)
+                      clean_definition = striphtml(line)
+                      articles[current_bullet]=clean_definition
+              else:
+                #print "We reach the end of the article!!"
+                raise StopIteration
+              line = next(my_file)
+
   except StopIteration:
       pass
   finally:
@@ -147,6 +205,31 @@ def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
               if lang_footer not in line:
                 my_line = striphtml(line)
                 if my_line != '':
+                  if bullet_separator in my_line:
+                    partial_current_bullet = my_line.split(bullet_separator)[0]
+                    current_bullet = partial_current_bullet.replace(" ","")
+                    #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
+                    line = next(my_file)
+                    #after the bullet, there is a empty line 
+                    if not re.match(r'^\s*$', line):
+                      line = next(my_file)
+                      clean_definition = striphtml(line)
+                      articles[current_bullet]=clean_definition
+              else:
+                #print "We reach the end of the article!!"
+                raise StopIteration
+              line = next(my_file)
+          ## logix for numbers
+	  ##Germans are germans... so, the bullet separator for numbers is . :/
+          if "1)" in line:
+            #print "And I found that here is a 1. coincidence" 
+	    #print line 
+            while True:
+              #print "I cant see that there is no end of article... like: " + lang_footer + " in Here."
+              if lang_footer not in line:
+                my_line = striphtml(line)
+                if my_line != '':
+                  #print "so, I start striping the html from the bullet separator"+ bullet_separator
                   if bullet_separator in my_line:
                     partial_current_bullet = my_line.split(bullet_separator)[0]
                     current_bullet = partial_current_bullet.replace(" ","")
