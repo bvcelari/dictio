@@ -35,7 +35,7 @@ def read_in_lines(file_object):
             break
         yield data
 
-def get_articles_es(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+def get_articles_letters_es(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -56,8 +56,22 @@ def get_articles_es(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
               else:
                 raise StopIteration
               line = next(my_file)
-	  ## logix for numbers
-	  if "1)" in line:
+  except StopIteration:
+      pass
+  finally:
+      del my_file
+  return articles
+
+def get_articles_numbers_es(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+  articles = {}
+  #my_file = read_in_lines(f_es)
+  try:
+    while True:
+      line = next(my_file)
+      if lang_header  in line:
+        while True:
+          line = next(my_file)
+          if "1)" in line:
             while True:
               #print line
               if lang_footer not in line:
@@ -69,14 +83,13 @@ def get_articles_es(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
               else:
                 raise StopIteration
               line = next(my_file)
-
   except StopIteration:
       pass
   finally:
       del my_file
   return articles
 
-def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+def get_articles_letters_en(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -87,7 +100,6 @@ def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
           line = next(my_file)
           if "a)" in line:
             while True:
-              #print line
               if lang_footer not in line:
                 my_line = striphtml(line)
                 if my_line != '':
@@ -105,7 +117,21 @@ def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
-          ## logix for numbers
+  except StopIteration:
+      pass
+  finally:
+      del my_file
+  return articles
+
+def get_articles_numbers_en(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+  articles = {}
+  #my_file = read_in_lines(f_es)
+  try:
+    while True:
+      line = next(my_file)
+      if lang_header  in line:
+        while True:
+          line = next(my_file)
           if "1)" in line:
             while True:
               #print line
@@ -126,14 +152,14 @@ def get_articles_en(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
-
   except StopIteration:
       pass
   finally:
       del my_file
   return articles
 
-def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+
+def get_articles_letters_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -162,22 +188,40 @@ def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
-          ## logix for numbers
+  except StopIteration:
+      pass
+  finally:
+      del my_file
+  return articles
+
+def get_articles_numbers_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+  articles = {}
+  #my_file = read_in_lines(f_es)
+  try:
+    while True:
+      line = next(my_file)
+      if lang_header  in line.replace("&nbsp;"," "):
+        while True:
+          line = next(my_file)
           if "1)" in line:
             while True:
-              #print line
-              if lang_footer not in line:
+              if lang_footer not in line.replace("&nbsp;"," "):
                 my_line = striphtml(line)
                 if my_line != '':
                   if bullet_separator in my_line:
                     partial_current_bullet = my_line.split(bullet_separator)[0]
-                    current_bullet = partial_current_bullet.replace(" ","")
+                    if '(' in partial_current_bullet:
+                      current_bullet = partial_current_bullet.split('(')[1]
+                    else:
+                      current_bullet = partial_current_bullet
+
                     #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
-                    line = next(my_file)
+                    ##line = next(my_file)
                     #after the bullet, there is a empty line 
                     if not re.match(r'^\s*$', line):
-                      line = next(my_file)
-                      clean_definition = striphtml(line)
+                      #line = next(my_file)
+                      partial_clean_definition = ''.join(line.split(')')[1:])
+                      clean_definition = striphtml(partial_clean_definition)
                       articles[current_bullet]=clean_definition
               else:
                 #print "We reach the end of the article!!"
@@ -190,7 +234,7 @@ def get_articles_fr(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
       del my_file
   return articles
 
-def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+def get_articles_letters_de(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
   articles = {}
   #my_file = read_in_lines(f_es)
   try:
@@ -219,20 +263,34 @@ def get_articles_de(my_file,bullet_separator,bullet_starter,lang_header,lang_foo
                 #print "We reach the end of the article!!"
                 raise StopIteration
               line = next(my_file)
-          ## logix for numbers
-	  ##Germans are germans... so, the bullet separator for numbers is . :/
+  except StopIteration:
+      pass
+  finally:
+      del my_file
+  return articles
+
+
+def get_articles_numbers_de(my_file,bullet_separator,bullet_starter,lang_header,lang_footer):
+  articles = {}
+  #my_file = read_in_lines(f_es)
+  try:
+    while True:
+      line = next(my_file)
+      if lang_header  in line.replace("&nbsp;"," "):
+        while True:
+          line = next(my_file)
           if "1)" in line:
-            #print "And I found that here is a 1. coincidence" 
-	    #print line 
             while True:
-              #print "I cant see that there is no end of article... like: " + lang_footer + " in Here."
-              if lang_footer not in line:
+              if lang_footer not in line.replace("&nbsp;"," "):
                 my_line = striphtml(line)
                 if my_line != '':
                   #print "so, I start striping the html from the bullet separator"+ bullet_separator
                   if bullet_separator in my_line:
                     partial_current_bullet = my_line.split(bullet_separator)[0]
-                    current_bullet = partial_current_bullet.replace(" ","")
+                    if '(' in partial_current_bullet:
+                      current_bullet = partial_current_bullet.split('(')[1]
+                    else:
+                      current_bullet = partial_current_bullet
                     #articles[my_line.split(bullet_separator)[0]]=my_line.split(bullet_separator)[1]
                     line = next(my_file)
                     #after the bullet, there is a empty line 
@@ -378,10 +436,17 @@ def main(argv):
   my_file_en = read_in_lines(f_en)
   my_file_fr = read_in_lines(f_fr)
   my_file_de = read_in_lines(f_de)
-  articles_es = get_articles_es(my_file_es,bullet_separator,bullet_starter,lang_list_article['ES'],lang_list_footer['ES'])
-  articles_en = get_articles_en(my_file_en,bullet_separator,bullet_starter,lang_list_article['EN'],lang_list_footer['EN'])
-  articles_fr = get_articles_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article['FR'],lang_list_footer['FR'])
-  articles_de = get_articles_de(my_file_de,bullet_separator,bullet_starter,lang_list_article['DE'],lang_list_footer['DE'])
+  if bullet == "letters":
+    articles_es = get_articles_letters_es(my_file_es,bullet_separator,bullet_starter,lang_list_article['ES'],lang_list_footer['ES'])
+    articles_en = get_articles_letters_en(my_file_en,bullet_separator,bullet_starter,lang_list_article['EN'],lang_list_footer['EN'])
+    articles_fr = get_articles_letters_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article['FR'],lang_list_footer['FR'])
+    articles_de = get_articles_letters_de(my_file_de,bullet_separator,bullet_starter,lang_list_article['DE'],lang_list_footer['DE'])
+  elif bullet == "numbers":
+    articles_es = get_articles_numbers_es(my_file_es,bullet_separator,bullet_starter,lang_list_article['ES'],lang_list_footer['ES'])
+    articles_en = get_articles_numbers_en(my_file_en,bullet_separator,bullet_starter,lang_list_article['EN'],lang_list_footer['EN'])
+    articles_fr = get_articles_numbers_fr(my_file_fr,bullet_separator,bullet_starter,lang_list_article['FR'],lang_list_footer['FR'])
+    articles_de = get_articles_numbers_de(my_file_de,bullet_separator,bullet_starter,lang_list_article['DE'],lang_list_footer['DE'])
+
   #I am Sure that there is 100 ways betters to do it... 
   print " {'ES':  "
   print articles_es
