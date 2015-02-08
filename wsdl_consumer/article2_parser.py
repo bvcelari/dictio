@@ -204,6 +204,8 @@ def get_articles_numbers_fr(my_file,bullet_separator,bullet_starter,lang_header,
         while True:
           line = next(my_file)
           if "1)" in line:
+            print "we found the first line"
+            print line
             while True:
               if lang_footer not in line.replace("&nbsp;"," "):
                 my_line = striphtml(line)

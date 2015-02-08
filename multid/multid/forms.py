@@ -1,8 +1,21 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from multid.models import ConceptEn, Category, SourceDocument
+import glob
+
+
 class ImportConcept(forms.Form):
     #url=#celex_id
+    res = glob.glob("/home/adminuser/Fran2/dictio/wsdl_consumer/parser*.py")
+    my_list = ()
+    for i in res:
+      choice = ()
+      choice += (i,)
+      choice = choice + (i.split('/')[-1],)
+      my_list += (choice,)
+    print choice
+    script = forms.ChoiceField(widget = forms.Select(),
+                     choices = (my_list), initial='1', required = True,)
     url=forms.URLField(required = True)	
     #kind#article2,  article1, article3
     kind = forms.ChoiceField(widget = forms.Select(), 
