@@ -274,3 +274,9 @@ def definition(request,lang_id,concept_id):
         raise Http404
     except:
       raise Http404
+
+def index(request,lang_id):
+   try:
+     return render_to_response('index_'+lang_id+'.html') 
+   except:
+     raise Http404

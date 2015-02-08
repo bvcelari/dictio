@@ -1,4 +1,5 @@
 Todo:
+- refactor GE for DE 
 - Fix check document in search page is not working 
 - Add user authentication
 - Create input form to parse documents

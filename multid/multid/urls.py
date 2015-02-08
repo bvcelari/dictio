@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'multid.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^(?P<lang_id>\w+)/$', 'multid.views.index', name='index'),
 
     #url(r'^$', 'multid.views.concepts', name='concepts'),
     url(r'^en/search/$', 'multid.views.searchen', name='concepts'),
