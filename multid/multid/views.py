@@ -37,14 +37,15 @@ def import_concepts(request):
       form = ImportConcept(request.POST)
       print request.POST
       if form.is_valid():
+        script = request.POST['script']
         url = request.POST['url']
         kind = request.POST['kind']
         bullet = request.POST['bullet']
         document_id = url.split('CELEX:')[1]
         dict_tree = {}
-        p = subprocess.Popen(["/home/adminuser/Fran2/dictio/wsdl_consumer/article2_parser.py -c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p = subprocess.Popen([script+ " -c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         print "EXECUTION"
-        print ["/home/adminuser/Fran2/dictio/wsdl_consumer/article2_parser.py -c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ]
+        print [script +"-c "+document_id+" -s "+kind +" --bullet=\""+bullet+"\"" ]
         out, err = p.communicate()
         print "OUT"
         print out
@@ -77,6 +78,7 @@ def import_concepts(request):
             new_values[key]=[values_es[key],values_en[key],values_fr[key],values_de[key]]
         ##now we are going to put the keys in place... is horrible... but is fast TODO: sent to another place and get the file instead of re-download it.
 	myrequest = request.POST.copy()
+        del myrequest['script']
         del myrequest['url']
         del myrequest['kind']
         del myrequest['bullet']
