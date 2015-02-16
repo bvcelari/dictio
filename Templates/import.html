@@ -2,9 +2,15 @@
     {% csrf_token %}
     {{ form.as_p  }}
 
-    <input type="submit" value="Submit" />
 
 {% if new_values %}
+ <input type="button" onclick="goBack()" value="Go Back" />
+
+<script>
+function goBack() {
+    window.history.back()
+}
+</script>
 <!-- -->
   <table border=1px>
   <tr><td> - </td><td>ES</td><TD>EN</TD><TD>FR</TD><TD>DE</TD><td>Yes  /Draft /No</td><TR>
@@ -24,6 +30,7 @@
   {% endfor %}
   </table>
 {% endif %}
+    <input type="submit" value="Submit" />
 </form>
 
 <!-- 

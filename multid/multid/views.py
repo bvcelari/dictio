@@ -17,6 +17,7 @@ import subprocess
 import ast
 
 import HTMLParser
+import re
 
 
 query_limit = 5
@@ -112,19 +113,19 @@ def import_concepts(request):
               h = HTMLParser.HTMLParser()
               #ToDo:Please, split and make it redeable.
               #from 1 to 4 ES EN FR DE
-	      new_concept_es = ConceptEs(name_es=h.unescape(new_values[key][0].split(separator_es)[0]),
+	      new_concept_es = ConceptEs(name_es=h.unescape(re.sub(r"(&\w*\;)", "",new_values[key][0].split(separator_es)[0]).strip()),
                     description_es=h.unescape(separator_es.join(new_values[key][0].split(separator_es)[1:])),
                     category_id=current_category, 
                     sourcedocument_id=current_source )
-	      new_concept_en = ConceptEn(name_en=h.unescape(new_values[key][1].split(separator_en)[0]), 
+	      new_concept_en = ConceptEn(name_en=h.unescape(re.sub(r"(&\w*\;)", "",new_values[key][1].split(separator_en)[0].strip())), 
                     description_en=h.unescape(separator_en.join(new_values[key][1].split(separator_en)[1:])),
                     category_id=current_category, 
                     sourcedocument_id=current_source )
-	      new_concept_fr = ConceptFr(name_fr=h.unescape(new_values[key][2].split(separator_fr)[0]), 
+	      new_concept_fr = ConceptFr(name_fr=h.unescape(re.sub(r"(&\w*\;)", "",new_values[key][2].split(separator_fr)[0].strip())), 
                     description_fr=h.unescape(separator_fr.join(new_values[key][2].split(separator_fr)[1:])),
                     category_id=current_category,
                     sourcedocument_id=current_source )
-	      new_concept_de = ConceptGe(name_ge=h.unescape(new_values[key][3].split(separator_de)[0]), 
+	      new_concept_de = ConceptGe(name_ge=h.unescape(re.sub(r"(&\w*\;)", "",new_values[key][3].split(separator_de)[0].strip())), 
                     description_ge=h.unescape(separator_de.join(new_values[key][3].split(separator_de)[1:])),
                     category_id=current_category, 
                     sourcedocument_id=current_source )
