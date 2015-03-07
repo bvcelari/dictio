@@ -182,8 +182,6 @@ def searchen(request):
 	    parent = Concept.objects.get(concept_en__id=i.id)
 	    if parent:
 	      full_result.append(parent)
-	    #print "who is your daddy " +str (parent.id)
-	    #print "who is your daddy EN " +str (parent.concept_en.id)
     else:
         form = ConceptSearchFormEN()
 
