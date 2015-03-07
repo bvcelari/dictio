@@ -20,9 +20,10 @@ function goBack() {
          <td>{{ concept |safe }}</td>
        {% endfor %}
         <td> 
-          {{ forloop.counter }}<input type="radio" name="{{ bullet }}" value="Y" checked>Y
+          {{ forloop.counter }}
+          <input type="radio" name="{{ bullet }}" value="Y" >Y
           <input type="radio" name="{{ bullet }}" value="D" >D
-          <input type="radio" name="{{ bullet }}" value="N" >N
+          <input type="radio" name="{{ bullet }}" value="N" checked>N
 
 <br>
         </td>

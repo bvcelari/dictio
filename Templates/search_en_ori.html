@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/en/search/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Search" />
+</form>
+
+<hr>
+Requested Serach: {{ search_param }}
+<hr>
+<br>
+
+{% for def in definition %}
+<br>   Definition:{{ def.name_en }}
+<hr>
+{% endfor %}
+
+<table border=1>
+<tr><td>
+Definition </ td> <td> Description </ td><td> Translations </ td> <td> source document </ td> <td> Category </ td> <td> checked
+</td></tr>
+
+{% for key, concept in concepts %}
+
+	<tr><td>{{ concept.name_en }}</td>
+
+<td>
+{{ concept.description_en }}
+<br>
+</td>
+<td>
+{% if key.concept_ge.id %}
+<a href="/ge/{{ key.concept_ge.id }}/">GE</a> 
+{% else %}
+GE
+{% endif %}
+{% if key.concept_fr.id %} 
+<a href="/fr/{{ key.concept_fr.id }}/">FR</a> 
+{% else %}
+FR
+{% endif %}
+{% if key.concept_es.id  %}
+<a href="/es/{{ key.concept_es.id }}/">ES</a> 
+{% else %}
+ES
+{% endif %}
+
+
+</td><td>{{ concept.sourcedocument.name_en }}</td><td>{{ concept.category.name_en}}</td><td>{% if concept.checked %} Yes {% else %} No* {% endif %} </td></tr>
+
+{% endfor %}
+</table>
+
+
+{% endblock %}
