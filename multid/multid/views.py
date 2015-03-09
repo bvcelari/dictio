@@ -279,3 +279,16 @@ def index(request,lang_id):
      return render_to_response('index_'+lang_id+'.html') 
    except:
      raise Http404
+
+def about(request,lang_id):
+   try:
+     return render_to_response('about_'+lang_id+'.html')
+   except:
+     raise Http404
+
+def contact(request,lang_id):
+   try:
+     return render_to_response('contact_'+lang_id+'.html')
+   except:
+     raise Http404
+
