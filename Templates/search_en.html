@@ -1,6 +1,7 @@
 {% extends "base_generic_en.html" %}
 {% load staticfiles %}
 {% block menu %}
+
 <header>
   <div class="container">
     <div class="row">
@@ -25,8 +26,8 @@
               <ul class="sf-menu">
                <li><a href="/en/index/">Home</a></li>
                <li><a href="/en/about/">About</a></li>
+               <li><a href="/en/contact/">Contacts</a></li>
                <li class="current"><a href="/en/search/">Search</a></li>
-               <li><a href="/en/contact/">Contacts</a></li>             </ul>
             </nav>
             <div class="clear"></div>
           </div>       
@@ -40,57 +41,52 @@
           Content
 ======================-->
 <section id="content"><div class="ic"></div>
+
+
+<div class="container">
+    <div class="row">
+      <div class="grid_12">
+        <h3>Search: {Search Term}</h3>
+      </div>
+
+                <form id="contact-form" action="/en/search/" method="post">
+                <div class="contact-form-loader"></div>
+                <fieldset>
+                  {% csrf_token %}
+                  <label class="name">
+                    <input type="text" data-constraints="@Required @JustLetters" value="" placeholder="Search:" name="concept_search">
+                    <span class="empty-message">*This field is required.</span>
+                    <span class="error-message">*This is not a valid concept.</span>
+                  </label>
+                </fieldset>
+                </form>
+
+    </div>
+</div>
+
   <div class="container">
     <div class="row">
       <div class="grid_12">
-        <h3>Search:</h3>
-        <div class="extra_wrapper">
-          <p class="fwn">Search Box:</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <article class="content_gray offset__1">
-    <div class="container">
-      <div class="row">
-        <div class="grid_12">
-          <h3 class="head__1">Results:</h3>
-          <div class="fwn">
-            <p>This is a ramdon test</p>
-            <p>Aliquam nibh ante, egestas id dictum a, commodo luctus liberoret. Praesenter faucibus malesuada faucibus. Donec laoreet metus id laoreet malesuada. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consectetur orci sed nulla facilisis consequa.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </article>
-  <div class="container">
-    <div class="row">
-      <div class="grid_12">
-        <h3>Our Staff</h3>
+        <h3>list result</h3>
       </div>
       <div class="grid_2">
-        <img src="{% static "images/page2_img1.jpg" %}" alt="" class="bord_img">
-        <div class="text2"><a href="#">Sharon Brown</a></div>Curabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
+        <div class="text2"><a href="#">Concept</a></div>Full Match Concept
+      </div>
+      <div class="grid_3">
+        <div class="text2"><a href="#">Definition</a></div> A cool term definition in LatinCurabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
+
       </div>
       <div class="grid_2">
-        <img src="{% static "images/page2_img2.jpg" %}" alt="" class="bord_img">
-        <div class="text2"><a href="#">Mark Carter</a></div>Curabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
+        <div class="text2"><a href="#">Translations</a></div>ES FR GE
       </div>
       <div class="grid_2">
-        <img src="{% static "images/page2_img3.jpg" %}" alt="" class="bord_img">
-        <div class="text2"><a href="#">Sandra Smith</a></div>Curabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
+        <div class="text2"><a href="#">Source Document</a></div>Work Development
       </div>
       <div class="grid_2">
-        <img src="{% static "images/page2_img4.jpg" %}" alt="" class="bord_img">
-        <div class="text2"><a href="#">Tim Jons</a></div>Curabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
+        <div class="text2"><a href="#">Category</a></div>Work Things
       </div>
-      <div class="grid_2">
-        <img src="{% static "images/page2_img5.jpg" %}" alt="" class="bord_img">
-        <div class="text2"><a href="#">Richard Wright</a></div>Curabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
-      </div>
-      <div class="grid_2">
-        <img src="{% static "images/page2_img6.jpg" %}" alt="" class="bord_img">
-        <div class="text2"><a href="#">Kevin Steawart</a></div>Curabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
+      <div class="grid_1">
+        <div class="text2"><a href="#">Checked</a></div>YNM
       </div>
     </div>
   </div>
