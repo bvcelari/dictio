@@ -48,19 +48,22 @@
       <div class="grid_12">
         <h3>Search: {Search Term}</h3>
       </div>
-
-                <form id="contact-form" action="/en/search/" method="post">
-                <div class="contact-form-loader"></div>
-                <fieldset>
-                  {% csrf_token %}
-                  <label class="name">
-                    <input type="text" data-constraints="@Required @JustLetters" value="" placeholder="Search:" name="concept_search">
-                    <span class="empty-message">*This field is required.</span>
-                    <span class="error-message">*This is not a valid concept.</span>
-                  </label>
-                </fieldset>
-                </form>
-
+      <div class="grid_12">
+        <form id="contact-form" action="/en/search/" method="post">
+        <div class="contact-form-loader"></div>
+        <fieldset>
+          {% csrf_token %}
+          <label class="name">
+            <input type="text" data-constraints="@Required @JustLetters" value="" placeholder="Search:" name="concept_search">
+            <span class="empty-message">*This field is required.</span>
+            <span class="error-message">*This is not a valid concept.</span>
+          </label>
+        </fieldset>
+        </form>
+      </div>
+      <div class="grid_2">
+        <a href="#" class="btn" data-type="submit">Search</a>
+      </div>
     </div>
 </div>
 
