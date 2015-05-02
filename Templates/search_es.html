@@ -1,58 +1,97 @@
-{% extends 'base.html' %}
+{% extends "base_generic_es.html" %}
+{% load staticfiles %}
+{% block menu %}
 
-{% block content %}
-<form action="/es/search/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Search" />
-</form>
-
-<hr>
-Requested Serach: {{ search_param }}
-<hr>
-<br>
-
-{% for def in definition %}
-<br>   D:{{ def.name_es }}
-<hr>
-{% endfor %}
-
-
-<table border=1>
-<tr><td>
-Definition </ td> <td> Description </ td><td> Translations </ td> <td> source document </ td> <td> Category </ td> <td> checked
-</td></tr>
-
-{% for key, concept in concepts %}
-
-	<tr><td>{{ concept.name_es }}</td>
-
-<td>
-{{ concept.description_es }}
-<br>
-</td>
-<td>
-{% if key.concept_ge.id %}
-<a href="/ge/{{ key.concept_ge.id }}/">GE</a> 
-{% else %}
-GE
-{% endif %}
-{% if key.concept_fr.id %} 
-<a href="/fr/{{ key.concept_ge.id }}/">FR</a> 
-{% else %}
-FR
-{% endif %}
-
-{% if key.concept_en.id  %}
-<a href="/es/{{ key.concept_en.id }}/">EN</a> 
-{% else %}
-ES
-{% endif %}
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="grid_12 rel">
+        <h1>
+          <a href="/es/index/">
+            <img src="{% static "images/logo.png" %}" alt="Logo alt">
+          </a>
+        </h1>
+      </div>
+    </div>
+  </div>
+  <section id="stuck_container">
+  <!--==============================
+              Stuck menu
+  =================================-->
+    <div class="container">
+      <div class="row">
+        <div class="grid_12 ">
+          <div class="navigation ">
+            <nav>
+              <ul class="sf-menu">
+               <li><a href="/es/index/">Inicio</a></li>
+               <li><a href="/es/about/">Acerca de</a></li>
+               <li><a href="/es/contact/">Contacto</a></li>
+               <li class="current"><a href="/es/search/">Búsqueda</a></li>
+            </nav>
+            <div class="clear"></div>
+          </div>       
+         <div class="clear"></div>  
+        </div>
+     </div> 
+    </div> 
+  </section>
+</header>
+<!--=====================
+          Content
+======================-->
+<section id="content"><div class="ic"></div>
 
 
-</td><td>{{ concept.sourcedocument.name_es }}</td><td>{{ concept.category.name_es }}</td><td>{% if concept.checked %} Yes {% else %} No* {% endif %} </td></tr>
+<div class="container">
+    <div class="row">
+      <div class="grid_12">
+        <h3>Búsqueda: {Search Term}</h3>
+      </div>
+      <div class="grid_12">
+        <form id="contact-form" action="/en/search/" method="post">
+        <div class="contact-form-loader"></div>
+        <fieldset>
+          {% csrf_token %}
+          <label class="name">
+            <input type="text" data-constraints="@Required @JustLetters" value="" placeholder="Search:" name="concept_search">
+            <span class="empty-message">*This field is required.</span>
+            <span class="error-message">*This is not a valid concept.</span>
+          </label>
+        </fieldset>
+        </form>
+      </div>
+      <div class="grid_2">
+        <a href="#" class="btn" data-type="submit">Busca</a>
+      </div>
+    </div>
+</div>
 
-{% endfor %}
-</table>
+  <div class="container">
+    <div class="row">
+      <div class="grid_12">
+        <h3>lista de resultados</h3>
+      </div>
+      <div class="grid_2">
+        <div class="text2"><a href="#">Concepto</a></div>Full Match Concept
+      </div>
+      <div class="grid_3">
+        <div class="text2"><a href="#">Definicion</a></div> A cool term definition in LatinCurabitur vel lorem sitmet nulla ullamcorper mentum In vitae dert rius augue, eu consectetur ligulaam dui eros dertolisce dertoloing quam id risus sagittis
 
+      </div>
+      <div class="grid_2">
+        <div class="text2"><a href="#">Translations</a></div>ES FR GE
+      </div>
+      <div class="grid_2">
+        <div class="text2"><a href="#">Source Document</a></div>Work Development
+      </div>
+      <div class="grid_2">
+        <div class="text2"><a href="#">Category</a></div>Work Things
+      </div>
+      <div class="grid_1">
+        <div class="text2"><a href="#">Checked</a></div>YNM
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
